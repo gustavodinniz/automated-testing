@@ -13,9 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PlanetServiceTest {
@@ -43,7 +43,29 @@ public class PlanetServiceTest {
         thenExpectPlanetServiceCreateRetunsPlanetResponse();
     }
 
+    @Test
+    public void shouldNotCreatePlanetWithInvalidDataThrowsException() {
+        givenInvalidPlanetRequest();
+        givenPlanetSaved();
+        givenPlanetResponse();
+        givenPlanetRepositorySaveThrowsException();
+        whenCallPlanetServiceCreateThrowsException();
+        thenExpectPlanetRepositorySaveCalledOnce();
+    }
+
     //given
+
+    private void givenPlanetRepositorySaveThrowsException() {
+        doThrow(RuntimeException.class).when(planetRepository).save(any(Planet.class));
+    }
+
+    private void givenInvalidPlanetRequest() {
+        planetRequest = PostCreatePlanetRequest.builder()
+                .name(" ")
+                .climate(" ")
+                .terrain(" ")
+                .build();
+    }
 
     private void givenPlanetSaved() {
         planetSaved = PostCreatePlanetRequest.valueOf(planetRequest);
@@ -75,6 +97,10 @@ public class PlanetServiceTest {
 
     private void whenCallPlanetServiceCreate() {
         planetService.create(planetRequest);
+    }
+
+    private void whenCallPlanetServiceCreateThrowsException() {
+        assertThrows(RuntimeException.class, () -> planetService.create(planetRequest));
     }
 
     //then
