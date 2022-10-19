@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: sw-planet
+  datasource:
+    url: jdbc:postgresql://localhost:5437/swplanet-db
+    username: admin
+    password: 123456
+    driver-class-name: org.postgresql.Driver

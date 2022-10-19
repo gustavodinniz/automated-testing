@@ -1,0 +1,1 @@
+sudo docker run --name swplanet-db -p 5437:5432 -e POSTGRES_DB=swplanet-db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=123456 postgres:latest
