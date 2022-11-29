@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,5 +24,9 @@ public class PlanetService {
         Planet planetSaved = planetRepository.save(planet);
         log.info("planet created successfully with id: {}", planetSaved.getPlanetId());
         return PostCreatePlanetResponse.valueOf(planetSaved);
+    }
+
+    public Optional<Planet> getPlanetById(UUID id) {
+        return planetRepository.findById(id);
     }
 }
